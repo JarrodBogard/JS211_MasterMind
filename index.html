@@ -3,13 +3,18 @@
   <head>
     <meta charset="utf-8">
     <title></title>
-    <script src="main.js"></script>
   </head>
-  <body>
-    <h1>Hello World!</h1>
-    <hr/>
-    <div id="display-element"></div>
-    <button onclick="displayDate()">Click Me</button>
-    <hr/>
+  <body onload="generateSolution()">
+    <div>
+      <label for="entry">Entry</label>
+      <input type="text" id="entry" >
+      <button id="submit" onclick="mastermind()">Submit</button>
+      <button id="clear" onclick="clearButton()">Clear</button>
+      <hr>
+      <div>
+        <ol id="ordered"></ol>
+      </div>
+    </div>
+    <script src="main.js"></script>
   </body>
 </html>
