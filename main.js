@@ -8,11 +8,12 @@
 // });
 
 let board = [];
-let solution = 'abcd';
+let solution = '';
 let str = ""
 let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 const input = document.querySelector("#entry")
 const ol = document.querySelector("#ordered")
+const hints = document.querySelector("#hints")
 
 input.addEventListener("keyup", e => {
   str = e.target.value
@@ -45,7 +46,7 @@ const generateHint = (guess) =>  {
   let hintOne = 0
   let hintTwo = 0
   guessArray.forEach((element, i) => {
-    if(guessArray[i] === solutionArray[i]) {
+    if(element === solutionArray[i]) {
       hintOne++
       guessArray[i] = 0
       solutionArray[i] = 1
@@ -62,29 +63,33 @@ const generateHint = (guess) =>  {
     })
   })
   console.log(hintOne, "-", hintTwo)
+  const anotherLi = document.createElement("li")
+  anotherLi.innerText = `Correct letters, correct position: ${hintOne}
+   Correct letters, incorrect position: ${hintTwo}`
+  hints.appendChild(anotherLi)
   return hintOne + "-" + hintTwo
 }
 
 const mastermind = (guess) => {
   guess = str
-  console.log(guess, "----mastermind----")
   const li = document.createElement("li")
   li.innerText = guess
   ol.appendChild(li)
-  // if(guess.length === 4 && guess.some() == letters.some()) {}
+  console.log(guess, "----mastermind----")
+  if(guess.length != 4 || !guess.match(/^[a-h]+$/)) {
+    return li.innerText = "Incorrect Entry: use 4 letters between a and h"
+  } 
   if(guess === solution) {
-    // console.log("Winner")
     return li.innerText = "You guessed it!"
   } else {
     board.push(guess)
-    // printBoard()
-    // console.log(board, "----board----")
     generateHint(guess)
   }
 }
 
 const clearButton = () => {
   ol.innerHTML = ""
+  hints.innerHTML = ""
   input.value = ""
   str = ""
 }
