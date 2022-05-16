@@ -1,16 +1,24 @@
-'use strict';
+// 'use strict';
 
-const assert = require('assert');
-const readline = require('readline');
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+// const assert = require('assert');
+// const readline = require('readline');
+// const rl = readline.createInterface({
+//   input: process.stdin,
+//   output: process.stdout
+// });
 
 let board = [];
 let solution = '';
+let str = ""
 let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+const input = document.querySelector("#entry")
+const ol = document.querySelector("#ordered")
+const hints = document.querySelector("#hints")
 
+input.addEventListener("keyup", e => {
+  str = e.target.value
+  console.log(str)
+})
 
 const printBoard = () =>  {
   for (let i = 0; i < board.length; i++) {
@@ -31,12 +39,14 @@ const getRandomInt = (min, max) => {
 }
 
 const generateHint = (guess) =>  {
+  guess = str
+  console.log(guess, "----generateHint----")
   let solutionArray = solution.split("")
   let guessArray = guess.split("")
   let hintOne = 0
   let hintTwo = 0
   guessArray.forEach((element, i) => {
-    if(guessArray[i] === solutionArray[i]) {
+    if(element === solutionArray[i]) {
       hintOne++
       guessArray[i] = 0
       solutionArray[i] = 1
@@ -53,57 +63,72 @@ const generateHint = (guess) =>  {
     })
   })
   console.log(hintOne, "-", hintTwo)
+  const anotherLi = document.createElement("li")
+  anotherLi.innerText = `Correct letters, correct position: ${hintOne}
+   Correct letters, incorrect position: ${hintTwo}`
+  hints.appendChild(anotherLi)
   return hintOne + "-" + hintTwo
 }
 
 const mastermind = (guess) => {
-
-  // solution = 'abcd'; // Comment this out to generate a random solution
+  guess = str
+  const li = document.createElement("li")
+  li.innerText = guess
+  ol.appendChild(li)
+  console.log(guess, "----mastermind----")
+  if(guess.length != 4 || !guess.match(/^[a-h]+$/)) {
+    return li.innerText = "Incorrect Entry: use 4 letters between a and h"
+  } 
   if(guess === solution) {
-    // console.log("Winner")
-    return "You guessed it!"
+    return li.innerText = "You guessed it!"
   } else {
     board.push(guess)
     generateHint(guess)
   }
 }
 
-
-const getPrompt = () =>  {
-  console.log(board, "---board---")
-  rl.question('guess: ', (guess) => {
-    mastermind(guess);
-    printBoard();
-    getPrompt();
-  });
+const clearButton = () => {
+  ol.innerHTML = ""
+  hints.innerHTML = ""
+  input.value = ""
+  str = ""
 }
+
+// const getPrompt = () =>  {
+//   console.log(board, "---board---")
+//   rl.question('guess: ', (guess) => {
+//     mastermind(guess);
+//     printBoard();
+//     getPrompt();
+//   });
+// }
 
 // Tests
 
-if (typeof describe === 'function') {
-  solution = 'abcd';
-  describe('#mastermind()', () => {
-    it('should register a guess and generate hints', () => {
-      mastermind('aabb');
-      assert.equal(board.length, 1);
-    });
-    it('should be able to detect a win', () => {
-      assert.equal(mastermind(solution), 'You guessed it!');
-    });
-  });
+// if (typeof describe === 'function') {
+//   solution = 'abcd';
+//   describe('#mastermind()', () => {
+//     it('should register a guess and generate hints', () => {
+//       mastermind('aabb');
+//       assert.equal(board.length, 1);
+//     });
+//     it('should be able to detect a win', () => {
+//       assert.equal(mastermind(solution), 'You guessed it!');
+//     });
+//   });
 
-  describe('#generateHint()', () => {
-    it('should generate hints', () => {
-      assert.equal(generateHint('abdc'), '2-2');
-    });
-    it('should generate hints if solution has duplicates', () => {
-      assert.equal(generateHint('aabb'), '1-1');
-    });
+//   describe('#generateHint()', () => {
+//     it('should generate hints', () => {
+//       assert.equal(generateHint('abdc'), '2-2');
+//     });
+//     it('should generate hints if solution has duplicates', () => {
+//       assert.equal(generateHint('aabb'), '1-1');
+//     });
 
-  });
+//   });
 
-} else {
+// } else {
 
-  generateSolution();
-  getPrompt();
-}
+//   generateSolution();
+//   getPrompt();
+// }
